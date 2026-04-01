@@ -6,7 +6,7 @@ Not another eval framework. The principles and tooling that make evals operation
 
 ## Status
 
-Work in progress. Extracting methodology and tooling from production use across 89+ LLM evals and 5 skills.
+Work in progress. Extracting methodology and tooling from production use across hundreds of LLM evals and 5 skills.
 
 ## Design Principles
 
