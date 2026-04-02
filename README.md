@@ -202,7 +202,7 @@ The methodology and tooling are domain-agnostic. The eval definitions and calibr
 | Cost tracking per eval run | Defining what "worth the cost" means for this business |
 | Batch execution, traceability | Building labeled test sets with ground truth for this use case |
 
-For enterprise deployments of custom-trained models, the calibration effort is the consulting engagement. The framework makes the engagement structured and repeatable. Without it, every deployment invents quality measurement from scratch.
+For any team deploying custom-trained models, the calibration effort is real work that requires domain expertise. The framework makes that work structured and repeatable instead of ad hoc. Without it, every deployment invents quality measurement from scratch.
 
 ## Proven Across
 
