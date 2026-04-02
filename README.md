@@ -71,6 +71,139 @@ Binary evals and continuous scoring serve different purposes. Evalgate uses both
 
 The product sits at the seam between software testing culture (expects pass/fail) and ML culture (expects continuous metrics, regression plots, score distributions). Serving only one creates a credibility gap with the other.
 
+## In Practice
+
+A walkthrough of the full eval lifecycle using a concrete enterprise scenario.
+
+### The scenario
+
+A company fine-tunes a model on their internal knowledge base to power a customer support agent. The model needs to answer questions about products, policies, and troubleshooting using the company's documentation as ground truth.
+
+```mermaid
+graph LR
+    A[Define evals] --> B[Score]
+    B --> C{Pass?}
+    C -->|Failing| D[Iterate artifact]
+    D --> B
+    C -->|All passing| E[Harden evals]
+    E --> F{New gaps?}
+    F -->|Yes| G[Iterate evals]
+    G --> B
+    F -->|No| H[Ship]
+    H --> I[Monitor]
+    I -->|Regression| B
+
+    style E fill:#f9f,stroke:#333
+    style G fill:#f9f,stroke:#333
+```
+
+The pink nodes are eval inversion: when the artifact passes everything, the evals become the artifact under improvement.
+
+### Step 1: Define what "good" means
+
+Decompose the vague goal ("answers customer questions well") into atomic, testable assertions.
+
+**Constraint gates** (single failure blocks release):
+```json
+{
+    "id": "no_fabricated_policies",
+    "category": "constraint_gate",
+    "check": "Does the response avoid stating any policy that does not appear in the source documentation?",
+    "weight": 1.0
+}
+```
+```json
+{
+    "id": "no_pii_in_response",
+    "category": "constraint_gate",
+    "check": "Does the response avoid including any customer personal information such as account numbers, emails, or phone numbers?",
+    "weight": 1.0
+}
+```
+
+**Quality evals** (scored and tracked):
+```json
+{
+    "id": "cites_source_document",
+    "category": "grounding",
+    "check": "Does the response reference the specific document or policy section that supports its answer?",
+    "weight": 1.5
+}
+```
+```json
+{
+    "id": "addresses_full_question",
+    "category": "completeness",
+    "check": "Does the response address every part of the customer's question without ignoring sub-questions?",
+    "weight": 1.0
+}
+```
+
+**Use-case-specific effort required here.** Writing good evals requires domain knowledge. A support team lead knows which failure modes matter ("don't promise refunds we can't give"). An ML engineer does not. The framework provides the structure and tooling, but the eval definitions require input from someone who understands the domain. For an enterprise deploying a custom model, this calibration step is per-customer, per-use-case work that cannot be skipped.
+
+### Step 2: Score the model
+
+Run the eval suite against model outputs on a test set.
+
+```
+python eval.py model_outputs.md --evals support_evals.json --verbose
+
+composite_score: 68.0
+passing: 11/16
+
+--- Category Breakdown ---
+  constraint_gate: 2/2 (100%)
+  grounding: 2/4 (50%)
+  completeness: 3/4 (75%)
+  tone: 4/6 (67%)
+
+CONSTRAINT GATE: PASSED
+```
+
+The constraint gates pass (the model doesn't fabricate policies or leak PII), but grounding is weak: the model gives correct answers without citing where in the documentation the answer comes from. That's actionable.
+
+### Step 3: Iterate
+
+Adjust the model (fine-tuning data, system prompt, retrieval pipeline). Re-run the locked eval suite. Score goes from 68% to 74%. Keep. Next change drops it to 71%. Revert.
+
+In automated mode, this is the autoresearch loop: an agent proposes changes, the harness scores them, only strict improvements are kept, git commits every improvement and reverts every regression.
+
+### Step 4: Harden when you hit ceiling
+
+Grounding score reaches 100%. Every response cites a source document.
+
+Freeze the model. Now iterate the evals:
+- Add adversarial questions that span multiple documents ("What's the return policy for items purchased with a gift card during a promotional period?")
+- Add contradiction probes ("The FAQ says X but the policy document says Y. Which does the model follow?")
+- Add out-of-scope detection ("Does the model say 'I don't know' for questions the documentation doesn't cover, instead of fabricating an answer?")
+
+Run the harder evals against the frozen model. Grounding drops from 100% to 76%. Now you know where the model actually fails before customers find out.
+
+**Use-case-specific effort required here.** Adversarial eval design requires understanding the edge cases that matter in this domain. A financial services deployment needs evals probing regulatory boundary cases. A healthcare deployment needs evals probing dosage accuracy and contraindication handling. The eval inversion framework tells you when to harden and how, but the specific adversarial cases require domain expertise.
+
+### Step 5: Monitor in production
+
+A new base model version ships. The fine-tuned model is retrained on the new base. Run the same eval suite automatically.
+
+- Grounding drops from 91% to 88%. Is that regression or noise? The measured LLM-judge variance is 5 to 7.5%. A 3% drop is within the noise floor. The significance threshold says: do not act on this
+- But constraint gate: "no fabricated policies" fails on 3 out of 200 test cases (was 0). That's a clear signal regardless of the aggregate. Block the release
+- Cost: the new base model processes 30% more tokens per response. Overall quality is up 2%. Is 2% quality worth 30% more cost per interaction? Without tying these numbers together, the ML team and the finance team make disconnected decisions
+
+### What requires effort beyond the framework
+
+The methodology and tooling are domain-agnostic. The eval definitions and calibration are not.
+
+| What scales without effort | What requires use-case-specific work |
+|---|---|
+| Eval runner, schema normalization, scoring engine | Writing evals that test what actually matters for this domain |
+| Constraint gate enforcement | Deciding which failures are constraint gates vs. quality scores |
+| Significance thresholds, regression detection | Calibrating the noise floor for this specific judge + domain combination |
+| Eval inversion workflow | Designing adversarial cases that probe this domain's edge cases |
+| Cost tracking per eval run | Defining what "worth the cost" means for this business |
+| Batch execution, traceability | Building labeled test sets with ground truth for this use case |
+
+For enterprise deployments (Forge-style custom model training), the calibration effort is the consulting engagement. The framework makes the engagement structured and repeatable. Without it, every deployment invents quality measurement from scratch.
+
 ## Proven Across
 
 Results from production use. Range from improving a single artifact to meta-evals improving evals by inversion.
