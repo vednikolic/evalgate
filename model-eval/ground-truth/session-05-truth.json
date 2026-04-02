@@ -1,0 +1,23 @@
+{
+  "expected_concepts": [
+    {"name": "schema-validation", "kind": "pattern", "required": true},
+    {"name": "token-bucket", "kind": "pattern", "required": true},
+    {"name": "dead-letter-queue", "kind": "pattern", "required": true},
+    {"name": "health-check-aggregation", "kind": "pattern", "required": true},
+    {"name": "rate-limiting", "kind": "topic", "required": false},
+    {"name": "json-schema", "kind": "tool", "required": false},
+    {"name": "input-validation", "kind": "pattern", "required": false},
+    {"name": "alert-throttling", "kind": "pattern", "required": false}
+  ],
+  "expected_edges": [
+    {"from": "schema-validation", "to": "json-schema", "relation": "depends-on"},
+    {"from": "token-bucket", "to": "rate-limiting", "relation": "is-instance-of"},
+    {"from": "schema-validation", "to": "input-validation", "relation": "is-instance-of"},
+    {"from": "dead-letter-queue", "to": "schema-validation", "relation": "related-to"},
+    {"from": "health-check-aggregation", "to": "alert-throttling", "relation": "enables"},
+    {"from": "alert-throttling", "to": "rate-limiting", "relation": "related-to"}
+  ],
+  "expected_rejections_min": 3,
+  "expected_rejections_max": 10,
+  "notes": "Cross-project complexity test. Three projects with interconnected concepts. Tests whether the model detects cross-project edges: schema-validation and input-validation link data-pipeline to api-gateway; alert-throttling links monitoring-dashboard to rate-limiting in api-gateway. High concept count (up to 8) and rich edge structure make this the hardest session."
+}

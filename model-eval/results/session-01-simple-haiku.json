@@ -1,0 +1,26 @@
+{
+  "session": "session-01-simple.md",
+  "model": "haiku",
+  "concepts": [
+    {
+      "name": "pytest",
+      "kind": "tool"
+    },
+    {
+      "name": "pytest-test-discovery",
+      "kind": "pattern"
+    }
+  ],
+  "edges": [
+    {
+      "from": "pytest",
+      "to": "pytest-test-discovery",
+      "relation": "enables"
+    }
+  ],
+  "rejected_count": 5,
+  "cost_usd": 0.013487899999999999,
+  "input_tokens": 32039,
+  "output_tokens": 2055,
+  "elapsed_seconds": 21.57
+}

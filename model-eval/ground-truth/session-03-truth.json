@@ -1,0 +1,16 @@
+{
+  "expected_concepts": [
+    {"name": "composite-index", "kind": "pattern", "required": true},
+    {"name": "query-optimization", "kind": "topic", "required": true},
+    {"name": "concurrent-index-creation", "kind": "pattern", "required": false},
+    {"name": "database-migration", "kind": "topic", "required": false},
+    {"name": "caching", "kind": "pattern", "required": false}
+  ],
+  "expected_edges": [
+    {"from": "composite-index", "to": "query-optimization", "relation": "enables"},
+    {"from": "concurrent-index-creation", "to": "database-migration", "relation": "related-to"}
+  ],
+  "expected_rejections_min": 2,
+  "expected_rejections_max": 10,
+  "notes": "Ambiguity test. 'Composite index' could be named 'compound index', 'multi-column index', or 'covering index'. 'Query optimization' could be 'query performance', 'database tuning', or 'slow query fix'. Tests fuzzy matching and whether the model picks canonical names. Caching was discussed but deferred, making it a borderline extraction."
+}

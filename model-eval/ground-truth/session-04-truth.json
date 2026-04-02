@@ -1,0 +1,12 @@
+{
+  "expected_concepts": [
+    {"name": "structured-logging", "kind": "pattern", "required": true},
+    {"name": "json-log-format", "kind": "pattern", "required": false}
+  ],
+  "expected_edges": [
+    {"from": "structured-logging", "to": "json-log-format", "relation": "related-to"}
+  ],
+  "expected_rejections_min": 4,
+  "expected_rejections_max": 12,
+  "notes": "Adversarial noise test. Session is mostly ephemeral Q&A (strftime, f-strings, typo fixes, shallow vs deep copy). Only the structured logging decision is a real concept worth extracting. A high-quality extraction finds structured-logging and rejects the rest. Models that extract 'deep-copy', 'strftime', or 'f-strings' as concepts are hallucinating signal from noise."
+}

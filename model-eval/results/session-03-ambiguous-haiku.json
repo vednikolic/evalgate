@@ -1,0 +1,53 @@
+{
+  "session": "session-03-ambiguous.md",
+  "model": "haiku",
+  "concepts": [
+    {
+      "name": "composite-index-optimization",
+      "kind": "pattern"
+    },
+    {
+      "name": "concurrent-index-creation",
+      "kind": "pattern"
+    },
+    {
+      "name": "explain-analyze-for-query-diagnosis",
+      "kind": "pattern"
+    },
+    {
+      "name": "column-order-in-composite-indexes",
+      "kind": "pattern"
+    },
+    {
+      "name": "index-before-caching-prioritization",
+      "kind": "decision"
+    }
+  ],
+  "edges": [
+    {
+      "from": "composite-index-optimization",
+      "to": "column-order-in-composite-indexes",
+      "relation": "depends-on"
+    },
+    {
+      "from": "concurrent-index-creation",
+      "to": "composite-index-optimization",
+      "relation": "enables"
+    },
+    {
+      "from": "explain-analyze-for-query-diagnosis",
+      "to": "composite-index-optimization",
+      "relation": "related-to"
+    },
+    {
+      "from": "index-before-caching-prioritization",
+      "to": "composite-index-optimization",
+      "relation": "related-to"
+    }
+  ],
+  "rejected_count": 7,
+  "cost_usd": 0.0112043,
+  "input_tokens": 32303,
+  "output_tokens": 1593,
+  "elapsed_seconds": 13.35
+}

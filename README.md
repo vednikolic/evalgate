@@ -214,11 +214,13 @@ Results from production use. Range from improving a single artifact to meta-eval
 
 **Adversarial stress testing.** [Red-Team](https://github.com/vednikolic/red-team) (18 evals, 100% after inversion) and [Steelman](https://github.com/vednikolic/steelman) (16 evals, 96.55%) use constraint gates to enforce structural requirements where partial compliance is not acceptable.
 
+**Model output evaluation.** [Cortex](https://github.com/vednikolic/cortex) concept extraction evaluated across models (Sonnet vs Haiku) on 5 test sessions with human-labeled ground truth. Sonnet achieves 0.90 recall vs Haiku's 0.60 on required concepts, with 0.90 vs 0.73 kind classification accuracy. Both models show similar precision (~0.56) and struggle with structured relationship extraction (edge recall under 0.10). Cost per correct concept is nearly identical ($0.005), making Sonnet the clear choice for extraction quality. Full harness, test corpus, and scoring code in [`model-eval/`](model-eval/).
+
 ## What's Next
 
 **Eval runner** (in progress): standalone Python toolkit extracting schema normalization, constraint gate enforcement, batch execution, and significance thresholds from the production implementations above.
 
-**Model-level eval examples**: concept extraction quality across models (precision, recall, hallucination rate) and multi-agent pipeline evaluation (4-agent chain with vision, confidence gating, end-to-end correctness).
+**Multi-agent pipeline evaluation**: end-to-end correctness measurement across a 4-agent chain with vision, confidence gating, and quality decomposition per stage.
 
 **Toward an intelligence accounting layer.** Eval scores tell you whether quality is good. Token cost tells you what you spent. Neither tells you whether the spend was worth it. The next horizon for Evalgate is tying quality measurement to cost measurement at the feature level: value delivered per token consumed, tracked continuously, comparable across models and orchestration strategies.
 

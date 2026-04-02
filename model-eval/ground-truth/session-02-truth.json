@@ -1,0 +1,17 @@
+{
+  "expected_concepts": [
+    {"name": "exponential-backoff", "kind": "pattern", "required": true},
+    {"name": "circuit-breaker", "kind": "pattern", "required": true},
+    {"name": "transient-vs-permanent-errors", "kind": "pattern", "required": false},
+    {"name": "integration-testing", "kind": "pattern", "required": false},
+    {"name": "thundering-herd", "kind": "topic", "required": false}
+  ],
+  "expected_edges": [
+    {"from": "exponential-backoff", "to": "circuit-breaker", "relation": "related-to"},
+    {"from": "circuit-breaker", "to": "transient-vs-permanent-errors", "relation": "depends-on"},
+    {"from": "exponential-backoff", "to": "thundering-herd", "relation": "related-to"}
+  ],
+  "expected_rejections_min": 2,
+  "expected_rejections_max": 10,
+  "notes": "Medium complexity. Two core resilience patterns plus supporting concepts. Tests whether the model identifies the relationship between backoff and circuit breaker (both are resilience mechanisms) and whether it correctly classifies kinds (patterns vs topics)."
+}

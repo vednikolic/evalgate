@@ -1,0 +1,53 @@
+{
+  "session": "session-02-medium.md",
+  "model": "haiku",
+  "concepts": [
+    {
+      "name": "exponential-backoff-with-jitter",
+      "kind": "pattern"
+    },
+    {
+      "name": "circuit-breaker",
+      "kind": "pattern"
+    },
+    {
+      "name": "error-classification-transient-vs-permanent",
+      "kind": "pattern"
+    },
+    {
+      "name": "api-client-resilience",
+      "kind": "pattern"
+    },
+    {
+      "name": "thundering-herd-problem",
+      "kind": "topic"
+    }
+  ],
+  "edges": [
+    {
+      "from": "api-client-resilience",
+      "to": "exponential-backoff-with-jitter",
+      "relation": "depends-on"
+    },
+    {
+      "from": "api-client-resilience",
+      "to": "circuit-breaker",
+      "relation": "depends-on"
+    },
+    {
+      "from": "api-client-resilience",
+      "to": "error-classification-transient-vs-permanent",
+      "relation": "depends-on"
+    },
+    {
+      "from": "exponential-backoff-with-jitter",
+      "to": "thundering-herd-problem",
+      "relation": "related-to"
+    }
+  ],
+  "rejected_count": 7,
+  "cost_usd": 0.014081699999999999,
+  "input_tokens": 32177,
+  "output_tokens": 2171,
+  "elapsed_seconds": 17.7
+}

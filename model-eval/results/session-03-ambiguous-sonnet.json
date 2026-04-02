@@ -1,0 +1,62 @@
+{
+  "session": "session-03-ambiguous.md",
+  "model": "sonnet",
+  "concepts": [
+    {
+      "name": "composite-index",
+      "kind": "pattern"
+    },
+    {
+      "name": "concurrent-index-creation",
+      "kind": "pattern"
+    },
+    {
+      "name": "explain-analyze",
+      "kind": "tool"
+    },
+    {
+      "name": "full-table-scan",
+      "kind": "pattern"
+    },
+    {
+      "name": "raw-sql-migration",
+      "kind": "pattern"
+    },
+    {
+      "name": "caching-layer",
+      "kind": "topic"
+    }
+  ],
+  "edges": [
+    {
+      "from": "composite-index",
+      "to": "full-table-scan",
+      "relation": "supersedes"
+    },
+    {
+      "from": "concurrent-index-creation",
+      "to": "composite-index",
+      "relation": "enables"
+    },
+    {
+      "from": "raw-sql-migration",
+      "to": "concurrent-index-creation",
+      "relation": "enables"
+    },
+    {
+      "from": "explain-analyze",
+      "to": "composite-index",
+      "relation": "enables"
+    },
+    {
+      "from": "caching-layer",
+      "to": "composite-index",
+      "relation": "related-to"
+    }
+  ],
+  "rejected_count": 5,
+  "cost_usd": 0.0180588,
+  "input_tokens": 22169,
+  "output_tokens": 760,
+  "elapsed_seconds": 11.85
+}

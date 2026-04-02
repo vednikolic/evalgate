@@ -1,0 +1,85 @@
+{
+  "session": "session-05-cross-project.md",
+  "model": "sonnet",
+  "concepts": [
+    {
+      "name": "schema-validation",
+      "kind": "pattern"
+    },
+    {
+      "name": "json-schema",
+      "kind": "tool"
+    },
+    {
+      "name": "dead-letter-queue",
+      "kind": "pattern"
+    },
+    {
+      "name": "rate-limiting",
+      "kind": "pattern"
+    },
+    {
+      "name": "token-bucket-algorithm",
+      "kind": "pattern"
+    },
+    {
+      "name": "health-check-aggregation",
+      "kind": "pattern"
+    },
+    {
+      "name": "shared-configuration-service",
+      "kind": "pattern"
+    },
+    {
+      "name": "input-validation",
+      "kind": "pattern"
+    }
+  ],
+  "edges": [
+    {
+      "from": "json-schema",
+      "to": "schema-validation",
+      "relation": "enables"
+    },
+    {
+      "from": "schema-validation",
+      "to": "input-validation",
+      "relation": "is-instance-of"
+    },
+    {
+      "from": "token-bucket-algorithm",
+      "to": "rate-limiting",
+      "relation": "enables"
+    },
+    {
+      "from": "input-validation",
+      "to": "dead-letter-queue",
+      "relation": "enables"
+    },
+    {
+      "from": "rate-limiting",
+      "to": "health-check-aggregation",
+      "relation": "related-to"
+    },
+    {
+      "from": "shared-configuration-service",
+      "to": "schema-validation",
+      "relation": "related-to"
+    },
+    {
+      "from": "shared-configuration-service",
+      "to": "rate-limiting",
+      "relation": "related-to"
+    },
+    {
+      "from": "dead-letter-queue",
+      "to": "input-validation",
+      "relation": "related-to"
+    }
+  ],
+  "rejected_count": 7,
+  "cost_usd": 0.0208689,
+  "input_tokens": 22286,
+  "output_tokens": 945,
+  "elapsed_seconds": 13.61
+}

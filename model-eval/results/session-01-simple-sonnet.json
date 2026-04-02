@@ -1,0 +1,39 @@
+{
+  "session": "session-01-simple.md",
+  "model": "sonnet",
+  "concepts": [
+    {
+      "name": "pytest",
+      "kind": "tool"
+    },
+    {
+      "name": "pytest-test-autodiscovery",
+      "kind": "pattern"
+    },
+    {
+      "name": "python-type-hints",
+      "kind": "pattern"
+    },
+    {
+      "name": "pytest-over-unittest",
+      "kind": "decision"
+    }
+  ],
+  "edges": [
+    {
+      "from": "pytest",
+      "to": "pytest-test-autodiscovery",
+      "relation": "enables"
+    },
+    {
+      "from": "pytest-over-unittest",
+      "to": "pytest",
+      "relation": "derived-from"
+    }
+  ],
+  "rejected_count": 5,
+  "cost_usd": 0.0149496,
+  "input_tokens": 21905,
+  "output_tokens": 558,
+  "elapsed_seconds": 11.52
+}

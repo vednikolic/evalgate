@@ -1,0 +1,62 @@
+{
+  "session": "session-05-cross-project.md",
+  "model": "haiku",
+  "concepts": [
+    {
+      "name": "dead-letter-queue",
+      "kind": "pattern"
+    },
+    {
+      "name": "token-bucket-algorithm",
+      "kind": "pattern"
+    },
+    {
+      "name": "health-check-aggregation",
+      "kind": "pattern"
+    },
+    {
+      "name": "schema-validation",
+      "kind": "pattern"
+    },
+    {
+      "name": "json-schema",
+      "kind": "tool"
+    },
+    {
+      "name": "runtime-configuration-service",
+      "kind": "pattern"
+    }
+  ],
+  "edges": [
+    {
+      "from": "schema-validation",
+      "to": "json-schema",
+      "relation": "depends-on"
+    },
+    {
+      "from": "schema-validation",
+      "to": "dead-letter-queue",
+      "relation": "enables"
+    },
+    {
+      "from": "runtime-configuration-service",
+      "to": "schema-validation",
+      "relation": "related-to"
+    },
+    {
+      "from": "runtime-configuration-service",
+      "to": "token-bucket-algorithm",
+      "relation": "related-to"
+    },
+    {
+      "from": "health-check-aggregation",
+      "to": "token-bucket-algorithm",
+      "relation": "related-to"
+    }
+  ],
+  "rejected_count": 7,
+  "cost_usd": 0.020851,
+  "input_tokens": 32420,
+  "output_tokens": 3520,
+  "elapsed_seconds": 27.42
+}

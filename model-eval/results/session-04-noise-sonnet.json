@@ -1,0 +1,26 @@
+{
+  "session": "session-04-noise.md",
+  "model": "sonnet",
+  "concepts": [
+    {
+      "name": "json-structured-logging",
+      "kind": "pattern"
+    },
+    {
+      "name": "stdlib-logging",
+      "kind": "tool"
+    }
+  ],
+  "edges": [
+    {
+      "from": "json-structured-logging",
+      "to": "stdlib-logging",
+      "relation": "depends-on"
+    }
+  ],
+  "rejected_count": 7,
+  "cost_usd": 0.0145968,
+  "input_tokens": 21979,
+  "output_tokens": 533,
+  "elapsed_seconds": 12.75
+}

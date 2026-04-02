@@ -1,0 +1,12 @@
+{
+  "expected_concepts": [
+    {"name": "pytest", "kind": "tool", "required": true},
+    {"name": "type-hints", "kind": "pattern", "required": true}
+  ],
+  "expected_edges": [
+    {"from": "pytest", "to": "type-hints", "relation": "related-to"}
+  ],
+  "expected_rejections_min": 2,
+  "expected_rejections_max": 10,
+  "notes": "Easy session with 2 obvious concepts. Tests baseline extraction on clear signal. A model that misses either concept is fundamentally broken. Venv setup is ephemeral and should not be extracted."
+}

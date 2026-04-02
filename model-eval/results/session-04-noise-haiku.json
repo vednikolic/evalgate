@@ -1,0 +1,16 @@
+{
+  "session": "session-04-noise.md",
+  "model": "haiku",
+  "concepts": [
+    {
+      "name": "json-formatted-logging",
+      "kind": "pattern"
+    }
+  ],
+  "edges": [],
+  "rejected_count": 10,
+  "cost_usd": 0.0090453,
+  "input_tokens": 32113,
+  "output_tokens": 1165,
+  "elapsed_seconds": 17.14
+}

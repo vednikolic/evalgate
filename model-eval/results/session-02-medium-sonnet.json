@@ -1,0 +1,67 @@
+{
+  "session": "session-02-medium.md",
+  "model": "sonnet",
+  "concepts": [
+    {
+      "name": "retry-mechanism",
+      "kind": "pattern"
+    },
+    {
+      "name": "exponential-backoff-with-jitter",
+      "kind": "pattern"
+    },
+    {
+      "name": "circuit-breaker",
+      "kind": "pattern"
+    },
+    {
+      "name": "transient-vs-permanent-error-classification",
+      "kind": "pattern"
+    },
+    {
+      "name": "api-client",
+      "kind": "tool"
+    },
+    {
+      "name": "mock-http-server",
+      "kind": "tool"
+    }
+  ],
+  "edges": [
+    {
+      "from": "exponential-backoff-with-jitter",
+      "to": "retry-mechanism",
+      "relation": "is-instance-of"
+    },
+    {
+      "from": "retry-mechanism",
+      "to": "transient-vs-permanent-error-classification",
+      "relation": "depends-on"
+    },
+    {
+      "from": "circuit-breaker",
+      "to": "retry-mechanism",
+      "relation": "related-to"
+    },
+    {
+      "from": "api-client",
+      "to": "retry-mechanism",
+      "relation": "depends-on"
+    },
+    {
+      "from": "api-client",
+      "to": "circuit-breaker",
+      "relation": "depends-on"
+    },
+    {
+      "from": "mock-http-server",
+      "to": "retry-mechanism",
+      "relation": "enables"
+    }
+  ],
+  "rejected_count": 4,
+  "cost_usd": 0.017765999999999997,
+  "input_tokens": 22043,
+  "output_tokens": 743,
+  "elapsed_seconds": 11.67
+}
