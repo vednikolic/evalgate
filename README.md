@@ -212,6 +212,19 @@ Results from production use. Range from improving a single artifact to meta-eval
 
 **Production skill evaluation.** [Cortex](https://github.com/vednikolic/cortex) runs 89 LLM evals across 3 production skills (86 to 100% pass rates). Each skill went through eval inversion: when scores hit ceiling, the evals were hardened rather than the skill being declared done. Four rounds of inversion found 11 gaps the original evals missed, including a contradiction between a behavioral instruction and a constraint that compound testing would never surface.
 
+**Eval inversion (meta-eval).** [Stakeholder Radar](https://github.com/vednikolic/stakeholder-radar) demonstrates the full eval inversion lifecycle. The v1 eval suite (18 structural checks like "does section X exist?") hit 100% on the first baseline, proving every eval had zero discriminability. Eval inversion froze the artifact and replaced the suite with 20 hardened evals testing behavioral consistency, contradiction handling, edge cases, and feature interactions. The new baseline dropped to 31.82% (7/20). An autoresearch loop then improved the artifact against the hardened evals: 21 rounds, 10 kept, 11 reverted, final score 88.64-93.18% (18-19/20). Concrete improvements the hardened evals surfaced that structural checks never would:
+
+| Hardened eval | What it found missing | Weight |
+|---|---|---|
+| `bootstrap_contradiction_handled` | No rule for when real evidence contradicts an archetype prior | 1.5 |
+| `update_handles_conflicting_evidence` | No guidance for new artifacts that contradict existing profile themes | 1.5 |
+| `simulation_type_behavioral_difference` | Document type detection changed probe questions but not severity weighting or approval criteria | 1.5 |
+| `staleness_interacts_with_confidence` | Staleness markers existed independently of confidence scoring with no specified interaction | 1.0 |
+| `synthesis_deduplicates_across_reviewers` | No instruction for merging semantically equivalent objections from different stakeholders | 1.0 |
+| `artifact_ingestion_ambiguity` | No handling for meeting notes containing signals from multiple stakeholders | 1.0 |
+
+The sole persistent failure (`behavioral_consistency_build`, 1.5 weight) tests whether two LLMs would converge on the same top 3 objections from identical artifacts. This eval may itself need decomposition (extraction convergence and clustering convergence are independent properties tested in one check), illustrating that eval quality improvement is recursive.
+
 **Adversarial stress testing.** [Red-Team](https://github.com/vednikolic/red-team) (18 evals, 100% after inversion) and [Steelman](https://github.com/vednikolic/steelman) (16 evals, 96.55%) use constraint gates to enforce structural requirements where partial compliance is not acceptable.
 
 **Model output evaluation.** [Cortex](https://github.com/vednikolic/cortex) concept extraction evaluated across models (Sonnet vs Haiku) on 5 test sessions with human-labeled ground truth. Sonnet achieves 0.90 recall vs Haiku's 0.60 on required concepts, with 0.90 vs 0.73 kind classification accuracy. Both models show similar precision (~0.56) and struggle with structured relationship extraction (edge recall under 0.10). Cost per correct concept is nearly identical ($0.005), making Sonnet the clear choice for extraction quality. Full harness, test corpus, and scoring code in [`model-eval/`](model-eval/).
